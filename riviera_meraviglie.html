@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riviera delle Meraviglie - Guida e Racconti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a5276;
+            --secondary: #d4a017;
+            --accent: #2d5a3d;
+            --light: #f8f9fa;
+            --dark: #1a1a1a;
+            --text: #333;
+            --ocean: #1a5276;
+            --sand: #f5e6c8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text);
+            background: var(--light);
+            line-height: 1.7;
+        }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--primary); }
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)),
+                        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            margin-top: 1rem;
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+        .hero-cta {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+        .btn-primary:hover {
+            background: transparent;
+            color: white;
+        }
+        .btn-outline {
+            background: transparent;
+            color: white;
+        }
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            animation: bounce 2s infinite;
+            font-size: 2rem;
+            color: white;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Zone Tabs */
+        .zone-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .zone-tab {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .zone-tab.active, .zone-tab:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .zone-content { display: none; }
+        .zone-content.active { display: block; }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .card-img {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--ocean));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+        .card-img.sea { background: linear-gradient(135deg, #1a5276, #2980b9); }
+        .card-img.mountain { background: linear-gradient(135deg, #2d5a3d, #27ae60); }
+        .card-img.town { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+        .card-content {
+            padding: 1.5rem;
+        }
+        .card-content h3 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .card-content p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        .tag {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+            margin-right: 0.3rem;
+            font-weight: 700;
+        }
+        .tag.green { background: var(--accent); }
+        .tag.blue { background: var(--ocean); }
+
+        /* Pista Ciclabile */
+        .ciclabile-banner {
+            background: linear-gradient(135deg, #1a5276, #2980b9);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .ciclabile-banner i {
+            font-size: 4rem;
+            opacity: 0.9;
+        }
+        .ciclabile-banner h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        .ciclabile-banner p {
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        /* Escursioni */
+        .escursioni-sea {
+            background: linear-gradient(135deg, #1a3a5c 0%, #1a5276 100%);
+            color: white;
+            padding: 5rem 2rem;
+        }
+        .escursioni-sea .section-title { color: white; }
+        .escursioni-sea .section-subtitle { color: #ccc; }
+        .escursioni-mountain {
+            background: linear-gradient(135deg, #1a3a2a 0%, #2d5a3d 100%);
+            color: white;
+            padding: 5rem 2rem;
+        }
+        .escursioni-mountain .section-title { color: white; }
+        .escursioni-mountain .section-subtitle { color: #ccc; }
+        .escursione-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            align-items: flex-start;
+        }
+        .escursione-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            min-width: 60px;
+        }
+        .escursione-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .escursione-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            color: #ccc;
+            flex-wrap: wrap;
+        }
+        .escursione-meta i { color: var(--secondary); margin-right: 0.3rem; }
+
+        /* Gastronomia */
+        .gastronomia-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .piatto-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border-top: 4px solid var(--secondary);
+        }
+        .piatto-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+        .piatto-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        .piatto-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .piatto-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Racconti Section */
+        .racconti-hero {
+            background: linear-gradient(135deg, #2c3e50, #4a6741);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+        .racconti-hero h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+        .racconti-hero p {
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        .racconti-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .racconto-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .racconto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .racconto-img {
+            height: 220px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        .racconto-img.sea-story { background: linear-gradient(135deg, #1a5276, #2980b9); }
+        .racconto-img.mountain-story { background: linear-gradient(135deg, #2d5a3d, #27ae60); }
+        .racconto-img.town-story { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+        .racconto-content {
+            padding: 1.5rem;
+        }
+        .racconto-content h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .racconto-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .racconto-meta i { margin-right: 0.3rem; }
+        .racconto-excerpt {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .read-more {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .read-more:hover { gap: 1rem; }
+
+        /* Racconto Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--ocean));
+            color: white;
+            padding: 2rem;
+            position: relative;
+        }
+        .modal-header h2 { font-size: 1.8rem; }
+        .modal-header .modal-meta {
+            opacity: 0.9;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.4); }
+        .modal-body {
+            padding: 2rem;
+        }
+        .modal-body p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        .modal-body img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        /* Attrazioni */
+        .attrazioni-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .attrazione-item {
+            display: flex;
+            gap: 1rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+        .attrazione-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-top: 0.3rem;
+        }
+        .attrazione-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+        .attrazione-item p {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Consigli */
+        .consigli-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .consiglio-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .consiglio-card i {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        .consiglio-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        footer p { color: #aaa; margin-top: 1rem; }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        .social-links a:hover { color: var(--secondary); }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .nav-links.active { display: flex; }
+            .hamburger { display: block; }
+            .escursione-item { flex-direction: column; }
+            .ciclabile-banner { flex-direction: column; text-align: center; }
+            .hero-cta { flex-direction: column; }
+            .racconti-grid { grid-template-columns: 1fr; }
+            section { padding: 3rem 1rem; }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo"><i class="fas fa-compass"></i> Riviera delle Meraviglie</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#costa">La Costa</a></li>
+            <li><a href="#vallata">La Vallata</a></li>
+            <li><a href="#racconti">Racconti</a></li>
+            <li><a href="#consigli">Consigli</a></li>
+        </ul>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Riviera delle Meraviglie</h1>
+        <p>Tra il mare cristallino di Sanremo e Santo Stefano al Mare, la pista ciclabile della Riviera dei Fiori e le antiche vallate dell'entroterra ligure. Un viaggio tra natura, storia e racconti.</p>
+        <div class="hero-cta">
+            <a href="#costa" class="btn btn-primary">Scopri la Costa</a>
+            <a href="#racconti" class="btn btn-outline">Leggi i Racconti</a>
+        </div>
+        <div class="scroll-down"><i class="fas fa-chevron-down"></i></div>
+    </section>
+
+    <!-- LA COSTA -->
+    <section id="costa">
+        <h2 class="section-title fade-in">La Costa</h2>
+        <p class="section-subtitle fade-in">Dal mare di Sanremo a Santo Stefano al Mare, lungo la pista ciclabile piu bella d'Italia</p>
+
+        <!-- Pista Ciclabile -->
+        <div class="ciclabile-banner fade-in">
+            <i class="fas fa-bicycle"></i>
+            <div>
+                <h3><i class="fas fa-route"></i> La Pista Ciclabile della Riviera dei Fiori</h3>
+                <p>24 km di pista ciclabile sul mare che collega Sanremo a Santo Stefano al Mare, passando per Arma di Taggia, Riva Ligure e altri incantevoli borghi costieri. Un percorso pianeggiante adatto a tutti, con viste mozzafiato sul Mar Ligure.</p>
+            </div>
+        </div>
+
+        <!-- Zone Tabs -->
+        <div class="zone-tabs fade-in">
+            <button class="zone-tab active" onclick="switchZone('sanremo')">Sanremo</button>
+            <button class="zone-tab" onclick="switchZone('taggia')">Taggia & Arma</button>
+            <button class="zone-tab" onclick="switchZone('riva')">Riva Ligure</button>
+            <button class="zone-tab" onclick="switchZone('santo')">Santo Stefano</button>
+        </div>
+
+        <!-- Sanremo -->
+        <div id="sanremo" class="zone-content active">
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-crown"></i></div>
+                    <div class="card-content">
+                        <h3>Sanremo - La Citta dei Fiori</h3>
+                        <span class="tag blue">Capitale della Riviera</span>
+                        <span class="tag">Casino</span>
+                        <p>Famosa per il Festival della Canzone Italiana, il Casino e i giardini fioriti. Il centro storico di La Pigna, il porto vecchio e il Corso dell'Imperatrice sono imperdibili.</p>
+                    </div>
+                </div>
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-umbrella-beach"></i></div>
+                    <div class="card-content">
+                        <h3>Spiagge e Lungomare</h3>
+                        <span class="tag blue">Mare</span>
+                        <span class="tag">Relax</span>
+                        <p>Spiagge di ciottoli e sabbia, stabilimenti balneari storici e il caratteristico lungomare che si estende per chilometri. Ideale per passeggiate al tramonto.</p>
+                    </div>
+                </div>
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-music"></i></div>
+                    <div class="card-content">
+                        <h3>Teatro Ariston & Festival</h3>
+                        <span class="tag">Cultura</span>
+                        <span class="tag">Eventi</span>
+                        <p>Il Teatro Ariston ospita il celebre Festival di Sanremo. Durante tutto l'anno concerti, spettacoli e manifestazioni culturali animano la citta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Taggia & Arma -->
+        <div id="taggia" class="zone-content">
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-img town"><i class="fas fa-church"></i></div>
+                    <div class="card-content">
+                        <h3>Taggia - Borgo Medievale</h3>
+                        <span class="tag">Borghi</span>
+                        <span class="tag">Storia</span>
+                        <p>Centro storico medievale ricco di piazze e chiese. Il Ponte Antico e l'unico della valle a piu arcate. Porto di accesso alla Valle Argentina.</p>
+                    </div>
+                </div>
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-anchor"></i></div>
+                    <div class="card-content">
+                        <h3>Arma di Taggia</h3>
+                        <span class="tag blue">Mare</span>
+                        <span class="tag">Porto</span>
+                        <p>Caratteristico borgo marinaro con il suo porticciolo, spiagge e il punto di partenza per risalire la Valle Argentina. Atmosfera autentica di mare.</p>
+                    </div>
+                </div>
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-fish"></i></div>
+                    <div class="card-content">
+                        <h3>Gastronomia di Mare</h3>
+                        <span class="tag">Pesce</span>
+                        <span class="tag">Olio Taggiasca</span>
+                        <p>Ristoranti sul porto con pesce fresco, acciughe sotto sale, olive Taggiasche e la tipica farinata. La cucina ligure in tutta la sua essenza.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Riva Ligure -->
+        <div id="riva" class="zone-content">
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-water"></i></div>
+                    <div class="card-content">
+                        <h3>Riva Ligure</h3>
+                        <span class="tag blue">Mare</span>
+                        <span class="tag">Borghi</span>
+                        <p>Affascinante borgo marinaro con case colorate affacciate sul mare. Spiaggia di ciottoli e acque cristalline. Meta ideale per chi cerca tranquillita.</p>
+                    </div>
+                </div>
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-sun"></i></div>
+                    <div class="card-content">
+                        <h3>Baia del Sole</h3>
+                        <span class="tag">Spiagge</span>
+                        <span class="tag">Relax</span>
+                        <p>Una delle baie piu belle della Riviera di Ponente. Mare cristallino e una spiaggia che offre refrigerio nelle giornate estive piu calde.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Santo Stefano -->
+        <div id="santo" class="zone-content">
+            <div class="cards-grid">
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-ship"></i></div>
+                    <div class="card-content">
+                        <h3>Santo Stefano al Mare</h3>
+                        <span class="tag blue">Mare</span>
+                        <span class="tag">Porto Turistico</span>
+                        <p>Moderno porto turistico, spiagge attrezzate e un centro storico accogliente. Il punto finale della pista ciclabile con vista sul Capo dell'Argentea.</p>
+                    </div>
+                </div>
+                <div class="card fade-in">
+                    <div class="card-img sea"><i class="fas fa-walking"></i></div>
+                    <div class="card-content">
+                        <h3>Passeggiate sul Mare</h3>
+                        <span class="tag">Natura</span>
+                        <span class="tag">Benessere</span>
+                        <p>Lungomare pedonale con palme, fiori e vista mare. Perfetto per jogging, passeggiate in bicicletta o semplicemente godersi il tramonto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Escursioni Costa -->
+    <section class="escursioni-sea">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 class="section-title fade-in">Attivita sulla Costa</h2>
+            <p class="section-subtitle fade-in">Cosa fare tra Sanremo e Santo Stefano al Mare</p>
+
+            <div class="escursione-item fade-in">
+                <div class="escursione-icon"><i class="fas fa-bicycle"></i></div>
+                <div class="escursione-info">
+                    <h3>Pista Ciclabile Riviera dei Fiori</h3>
+                    <p>24 km di pista ciclabile costiera su ex tracciato ferroviario. Percorso pianeggiante adatto a tutti, con tunnel illuminati, ponti sul mare e panorami mozzafiato. Noleggio bici disponibile in tutti i paesi.</p>
+                    <div class="escursione-meta">
+                        <span><i class="fas fa-route"></i> 24 km</span>
+                        <span><i class="fas fa-signal"></i> Facile</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Sanremo → Santo Stefano</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="escursione-item fade-in">
+                <div class="escursione-icon"><i class="fas fa-swimmer"></i></div>
+                <div class="escursione-info">
+                    <h3>Snorkeling e Mare</h3>
+                    <p>Acque cristalline ideali per lo snorkeling. Fondali ricchi di vita marina tra Riva Ligure e Santo Stefano. Possibilita di noleggio kayak e paddleboard.</p>
+                    <div class="escursione-meta">
+                        <span><i class="fas fa-clock"></i> Tutto l'anno</span>
+                        <span><i class="fas fa-sun"></i> Ideale estate</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Lungomare</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="escursione-item fade-in">
+                <div class="escursione-icon"><i class="fas fa-camera"></i></div>
+                <div class="escursione-info">
+                    <h3>Fotografia al Tramonto</h3>
+                    <p>I tramonti sulla costa tra Sanremo e Santo Stefano sono tra i piu spettacolari della Liguria. Spiagge, scogliere e il porto offrono location perfette per gli appassionati di fotografia.</p>
+                    <div class="escursione-meta">
+                        <span><i class="fas fa-clock"></i> Serale</span>
+                        <span><i class="fas fa-camera"></i> Fotografia</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Tutta la costa</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LA VALLATA -->
+    <section id="vallata">
+        <h2 class="section-title fade-in">La Vallata</h2>
+        <p class="section-subtitle fade-in">La Valle Argentina alle spalle di Arma di Taggia, tra borghi medievali e natura selvaggia</p>
+
+        <div class="cards-grid">
+            <div class="card fade-in">
+                <div class="card-img mountain"><i class="fas fa-hat-wizard"></i></div>
+                <div class="card-content">
+                    <h3>Triora - Paese delle Streghe</h3>
+                    <span class="tag green">Borghi piu Belli d'Italia</span>
+                    <span class="tag">Bandiera Arancione</span>
+                    <p>Famoso per il processo alle streghe del 1587. Museo della stregoneria, viuzze medievali e atmosfera magica. Uno dei borghi piu affascinanti d'Italia.</p>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img town"><i class="fas fa-paint-brush"></i></div>
+                <div class="card-content">
+                    <h3>Badalucco - Borgo Dipinto</h3>
+                    <span class="tag">Murales</span>
+                    <span class="tag">Arte</span>
+                    <p>Situato a bordo del torrente Argentina, e il "borgo dipinto" con murales colorati curati dagli abitanti. Ingressi colorati e atmosfera accogliente.</p>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img mountain"><i class="fas fa-fort-awesome"></i></div>
+                <div class="card-content">
+                    <h3>Montalto Ligure</h3>
+                    <span class="tag">Borgo Fortificato</span>
+                    <span class="tag">Storia</span>
+                    <p>Borgo fortificato con storia millenaria, collocato strategicamente nel cuore della valle. Patria della torta Frandura.</p>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img mountain"><i class="fas fa-mountain"></i></div>
+                <div class="card-content">
+                    <h3>Verdeggia & Realdo</h3>
+                    <span class="tag green">Cultura Brigasca</span>
+                    <span class="tag">Montagna</span>
+                    <p>Borghi di montagna oltre i 1.000 metri con case in legno tipiche e dialetto di origine occitana. Realdo e arroccato su una parete calcarea ripida.</p>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img mountain"><i class="fas fa-water"></i></div>
+                <div class="card-content">
+                    <h3>Laghetto di Noci</h3>
+                    <span class="tag green">Natura</span>
+                    <span class="tag">Benessere</span>
+                    <p>Piccolo bacino artificiale ai piedi di Triora, circondato da alberi di noce. Meta ideale per un tuffo rinfrescante d'estate.</p>
+                </div>
+            </div>
+            <div class="card fade-in">
+                <div class="card-img mountain"><i class="fas fa-church"></i></div>
+                <div class="card-content">
+                    <h3>Santuario di Loreto</h3>
+                    <span class="tag">Storia</span>
+                    <span class="tag">Panorama</span>
+                    <p>Con il suo porticato che anticamente serviva come deposito del sale. Vicino al ponte piu alto d'Europa e a Cetta, frazione minuta ma graziosa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Escursioni Vallata -->
+    <section class="escursioni-mountain">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 class="section-title fade-in">Escursioni in Vallata</h2>
+            <p class="section-subtitle fade-in">Sentieri per tutti i livelli immersi nei boschi delle Alpi Liguri</p>
+
+            <div class="escursione-item fade-in">
+                <div class="escursione-icon"><i class="fas fa-mountain"></i></div>
+                <div class="escursione-info">
+                    <h3>Monte Saccarello (2.200 m)</h3>
+                    <p>La vetta piu alta della Liguria. Itinerario ad anello da Realdo attraverso lariceti radi e rododendri. Panorama spettacolare dal mare alle Alpi.</p>
+                    <div class="escursione-meta">
+                        <span><i class="fas fa-clock"></i> 7h30</span>
+                        <span><i class="fas fa-signal"></i> Difficolta escursionistica</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Da Realdo</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="escursione-item fade-in">
+                <div class="escursione-icon"><i class="fas fa-tree"></i></div>
+                <div class="escursione-info">
+                    <h3>Ciotto di San Lorenzo e Passo della Mezzaluna</h3>
+                    <p>Sentiero facile tra Drego e Rezzo che attraversa una faggeta fittissima fino a una depressione di origine antica usata come pascolo.</p>
+                    <div class="escursione-meta">
+                        <span><i class="fas fa-clock"></i> 1h30</span>
+                        <span><i class="fas fa-signal"></i> Facile</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Drego - Rezzo</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="escursione-item fade-in">
+                <div class="escursione-icon"><i class="fas fa-hiking"></i></div>
+                <div class="escursione-info">
+                    <h3>Verdeggia – Triora – Molini</h3>
+                    <p>Itinerario che attraversa il Passo della Guardia (1.456 m), ruderi di antiche borgate e scorci storici, scendendo fino a Triora e Molini di Triora.</p>
+                    <div class="escursione-meta">
+                        <span><i class="fas fa-clock"></i> 5h30</span>
+                        <span><i class="fas fa-signal"></i> Media difficolta</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Verdeggia → Molini</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gastronomia -->
+    <section id="gastronomia">
+        <h2 class="section-title fade-in">Gastronomia</h2>
+        <p class="section-subtitle fade-in">Sapori del mare e della montagna, dalla Riviera all'entroterra</p>
+        <div class="gastronomia-grid">
+            <div class="piatto-card fade-in">
+                <div class="piatto-icon"><i class="fas fa-fish"></i></div>
+                <h3>Cucina di Mare</h3>
+                <p>Pesce fresco, acciughe sotto sale, fritto misto di paranza, stoccafisso brandacujun e la tipica farinata ligure. Ristoranti sul porto con vista mare.</p>
+            </div>
+            <div class="piatto-card fade-in">
+                <div class="piatto-icon"><i class="fas fa-bread-slice"></i></div>
+                <h3>Pane di Triora</h3>
+                <p>Il prodotto simbolo della valle, con la sua caratteristica forma rotonda. Un pane rustico che racconta secoli di tradizione contadina.</p>
+            </div>
+            <div class="piatto-card fade-in">
+                <div class="piatto-icon"><i class="fas fa-cheese"></i></div>
+                <h3>Bruzzo</h3>
+                <p>Uno dei formaggi piu antichi dell'Alta Valle Argentina, ottenuto dalla fermentazione naturale della ricotta. Sapore leggermente piccante.</p>
+            </div>
+            <div class="piatto-card fade-in">
+                <div class="piatto-icon"><i class="fas fa-utensils"></i></div>
+                <h3>Frandura</h3>
+                <p>Torta salata originaria di Montalto Ligure a base di patate, farina e noce moscata. Nata nell'Ottocento come cibo per i contadini.</p>
+            </div>
+            <div class="piatto-card fade-in">
+                <div class="piatto-icon"><i class="fas fa-leaf"></i></div>
+                <h3>Olio Taggiasca</h3>
+                <p>L'oro verde della Riviera. Olio extravergine d'oliva ottenuto dalla cultivar Taggiasca, delicato e profumato, base della cucina ligure.</p>
+            </div>
+            <div class="piatto-card fade-in">
+                <div class="piatto-icon"><i class="fas fa-cookie"></i></div>
+                <h3>Dolci Artigianali</h3>
+                <p>Canestrelli, torrone, torte farcite con marmellate artigianali e i dolci tipici di ogni borgo della valle.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- RACCONTI -->
+    <div class="racconti-hero" id="racconti">
+        <h2><i class="fas fa-book-open"></i> Racconti della Riviera</h2>
+        <p>Storie, leggende e racconti ambientati tra il mare di Sanremo, Santo Stefano al Mare e le vallate dell'entroterra. Testi originali accompagnati da fotografie che catturano l'anima autentica di questa terra.</p>
+    </div>
+
+    <section style="padding: 0;">
+        <div class="racconti-grid">
+            <!-- RACCONTO 1 -->
+            <div class="racconto-card fade-in" onclick="openModal('racconto1')">
+                <div class="racconto-img sea-story"><i class="fas fa-water"></i></div>
+                <div class="racconto-content">
+                    <div class="racconto-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Sanremo</span>
+                        <span><i class="fas fa-calendar"></i> Estate</span>
+                    </div>
+                    <h3>Il Profumo del Mare a Sanremo</h3>
+                    <p class="racconto-excerpt">Un racconto sulle mattinate d'estate lungo il lungomare di Sanremo, quando il sole ancora basso colora d'oro il mare e il profumo dei fiori si mescola a quello del sale...</p>
+                    <span class="read-more">Leggi il racconto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- RACCONTO 2 -->
+            <div class="racconto-card fade-in" onclick="openModal('racconto2')">
+                <div class="racconto-img mountain-story"><i class="fas fa-mountain"></i></div>
+                <div class="racconto-content">
+                    <div class="racconto-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Triora</span>
+                        <span><i class="fas fa-calendar"></i> Autunno</span>
+                    </div>
+                    <h3>Le Ombre di Triora</h3>
+                    <p class="racconto-excerpt">Quando la nebbia avvolge le viuzze di Triora, i vecchi raccontano ancora di streghe e processi. Una passeggiata nel borgo piu misterioso della Liguria...</p>
+                    <span class="read-more">Leggi il racconto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- RACCONTO 3 -->
+            <div class="racconto-card fade-in" onclick="openModal('racconto3')">
+                <div class="racconto-img sea-story"><i class="fas fa-bicycle"></i></div>
+                <div class="racconto-content">
+                    <div class="racconto-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Pista Ciclabile</span>
+                        <span><i class="fas fa-calendar"></i> Primavera</span>
+                    </div>
+                    <h3>Due Ruote sul Mare</h3>
+                    <p class="racconto-excerpt">Pedalare lungo la pista ciclabile della Riviera dei Fiori e un viaggio attraverso paesaggi che cambiano ad ogni curva. Dal porto di Sanremo a Santo Stefano al Mare...</p>
+                    <span class="read-more">Leggi il racconto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- RACCONTO 4 -->
+            <div class="racconto-card fade-in" onclick="openModal('racconto4')">
+                <div class="racconto-img town-story"><i class="fas fa-anchor"></i></div>
+                <div class="racconto-content">
+                    <div class="racconto-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Arma di Taggia</span>
+                        <span><i class="fas fa-calendar"></i> Inverno</span>
+                    </div>
+                    <h3>Il Porto d'Inverno</h3>
+                    <p class="racconto-excerpt">Quando i turisti se ne vanno, Arma di Taggia rivela il suo volto autentico. Pescatori che riparano le reti, barche che dondolano silenziose e il mare invernale che culla il borgo...</p>
+                    <span class="read-more">Leggi il racconto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- RACCONTO 5 -->
+            <div class="racconto-card fade-in" onclick="openModal('racconto5')">
+                <div class="racconto-img sea-story"><i class="fas fa-sun"></i></div>
+                <div class="racconto-content">
+                    <div class="racconto-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Santo Stefano al Mare</span>
+                        <span><i class="fas fa-calendar"></i> Tramonto</span>
+                    </div>
+                    <h3>L'Ultima Luce</h3>
+                    <p class="racconto-excerpt">Il tramonto a Santo Stefano al Mare e uno spettacolo che non si puo raccontare, si puo solo vivere. Quando il sole tinge d'oro il mare e le vele tornano al porto...</p>
+                    <span class="read-more">Leggi il racconto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+
+            <!-- RACCONTO 6 -->
+            <div class="racconto-card fade-in" onclick="openModal('racconto6')">
+                <div class="racconto-img mountain-story"><i class="fas fa-home"></i></div>
+                <div class="racconto-content">
+                    <div class="racconto-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> Badalucco</span>
+                        <span><i class="fas fa-calendar"></i> Estate</span>
+                    </div>
+                    <h3>I Colori di Badalucco</h3>
+                    <p class="racconto-excerpt">Camminare per le strade di Badalucco e come entrare in un quadro. I murales raccontano storie di pescatori, contadini e artisti che hanno trasformato questo borgo in un museo a cielo aperto...</p>
+                    <span class="read-more">Leggi il racconto <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODALS -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <!-- Modal 1 -->
+        <div class="modal-content" id="racconto1" style="display:none;">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModalDirect()">×</button>
+                <h2>Il Profumo del Mare a Sanremo</h2>
+                <div class="modal-meta">
+                    <i class="fas fa-map-marker-alt"></i> Sanremo &nbsp;|&nbsp; 
+                    <i class="fas fa-calendar"></i> Estate &nbsp;|&nbsp;
+                    <i class="fas fa-camera"></i> Servizio fotografico
+                </div>
+            </div>
+            <div class="modal-body">
+                <p><em>[Inserisci qui il testo completo del tuo racconto. Questo e uno spazio riservato per i tuoi racconti originali ambientati a Sanremo.]</em></p>
+                <p>Puoi descrivere le mattinate lungo il Corso dell'Imperatrice, il profumo dei fiori dei giardini, il mercato dei fiori, i vecchi pescatori al porto, le serate al Casino o le passeggiate nella Pigna.</p>
+                <p><strong>Suggerimento per le foto:</strong> Aggiungi qui le immagini del tuo servizio fotografico usando il tag <code>&lt;img src="percorso/foto.jpg"&gt;</code></p>
+                <div style="background: #f0f0f0; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <i class="fas fa-info-circle"></i> <strong>Per aggiungere questo racconto:</strong> Modifica il testo tra i tag <code>&lt;div class="modal-body"&gt;</code> sostituendo il testo segnaposto con il tuo racconto completo.
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 2 -->
+        <div class="modal-content" id="racconto2" style="display:none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #2d5a3d, #27ae60);">
+                <button class="modal-close" onclick="closeModalDirect()">×</button>
+                <h2>Le Ombre di Triora</h2>
+                <div class="modal-meta">
+                    <i class="fas fa-map-marker-alt"></i> Triora &nbsp;|&nbsp; 
+                    <i class="fas fa-calendar"></i> Autunno &nbsp;|&nbsp;
+                    <i class="fas fa-camera"></i> Servizio fotografico
+                </div>
+            </div>
+            <div class="modal-body">
+                <p><em>[Inserisci qui il testo completo del tuo racconto ambientato a Triora.]</em></p>
+                <p>Descrivi l'atmosfera mistica del borgo, le leggende delle streghe, le viuzze strette, il museo, le case di pietra e i panorami che si aprono all'improvviso.</p>
+                <div style="background: #f0f0f0; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <i class="fas fa-info-circle"></i> <strong>Spazio riservato per il tuo racconto e le tue fotografie di Triora.</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal 3 -->
+        <div class="modal-content" id="racconto3" style="display:none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #1a5276, #2980b9);">
+                <button class="modal-close" onclick="closeModalDirect()">×</button>
+                <h2>Due Ruote sul Mare</h2>
+                <div class="modal-meta">
+                    <i class="fas fa-map-marker-alt"></i> Pista Ciclabile &nbsp;|&nbsp; 
+                    <i class="fas fa-calendar"></i> Primavera &nbsp;|&nbsp;
+                    <i class="fas fa-camera"></i> Servizio fotografico
+                </div>
+            </div>
+            <div class="modal-body">
+                <p><em>[Inserisci qui il tuo racconto sulla pista ciclabile della Riviera dei Fiori.]</em></p>
+                <p>Racconta l'esperienza di pedalare lungo il mare, i paesaggi che si susseguono, i profumi, i suoni, gli incontri lungo il percorso.</p>
+            </div>
+        </div>
+
+        <!-- Modal 4 -->
+        <div class="modal-content" id="racconto4" style="display:none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #5d4e37, #8b7355);">
+                <button class="modal-close" onclick="closeModalDirect()">×</button>
+                <h2>Il Porto d'Inverno</h2>
+                <div class="modal-meta">
+                    <i class="fas fa-map-marker-alt"></i> Arma di Taggia &nbsp;|&nbsp; 
+                    <i class="fas fa-calendar"></i> Inverno &nbsp;|&nbsp;
+                    <i class="fas fa-camera"></i> Servizio fotografico
+                </div>
+            </div>
+            <div class="modal-body">
+                <p><em>[Inserisci qui il tuo racconto sul porto di Arma di Taggia in inverno.]</em></p>
+                <p>Descrivi l'atmosfera silenziosa del porto fuori stagione, i pescatori, le barche, il mare in tempesta o la calma piatta.</p>
+            </div>
+        </div>
+
+        <!-- Modal 5 -->
+        <div class="modal-content" id="racconto5" style="display:none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #d35400, #e67e22);">
+                <button class="modal-close" onclick="closeModalDirect()">×</button>
+                <h2>L'Ultima Luce</h2>
+                <div class="modal-meta">
+                    <i class="fas fa-map-marker-alt"></i> Santo Stefano al Mare &nbsp;|&nbsp; 
+                    <i class="fas fa-calendar"></i> Tramonto &nbsp;|&nbsp;
+                    <i class="fas fa-camera"></i> Servizio fotografico
+                </div>
+            </div>
+            <div class="modal-body">
+                <p><em>[Inserisci qui il tuo racconto sui tramonti a Santo Stefano al Mare.]</em></p>
+                <p>Racconta la magia del tramonto sul mare, i colori, le sensazioni, le persone, la vita che rallenta.</p>
+            </div>
+        </div>
+
+        <!-- Modal 6 -->
+        <div class="modal-content" id="racconto6" style="display:none;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                <button class="modal-close" onclick="closeModalDirect()">×</button>
+                <h2>I Colori di Badalucco</h2>
+                <div class="modal-meta">
+                    <i class="fas fa-map-marker-alt"></i> Badalucco &nbsp;|&nbsp; 
+                    <i class="fas fa-calendar"></i> Estate &nbsp;|&nbsp;
+                    <i class="fas fa-camera"></i> Servizio fotografico
+                </div>
+            </div>
+            <div class="modal-body">
+                <p><em>[Inserisci qui il tuo racconto su Badalucco e i suoi murales.]</em></p>
+                <p>Descrivi i colori, le opere d'arte, la creativita degli abitanti, l'atmosfera del borgo dipinto.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consigli -->
+    <section class="consigli" id="consigli">
+        <h2 class="section-title fade-in">Consigli Pratici</h2>
+        <p class="section-subtitle fade-in">Tutto cio che devi sapere per esplorare la Riviera delle Meraviglie</p>
+        <div class="consigli-grid">
+            <div class="consiglio-card fade-in">
+                <i class="fas fa-car"></i>
+                <h4>Come Arrivare</h4>
+                <p>Autostrada A10 (Genova-Ventimiglia). Uscite: Sanremo, Arma di Taggia per la valle. Treno: linea Genova-Ventimiglia con fermate in tutti i paesi.</p>
+            </div>
+            <div class="consiglio-card fade-in">
+                <i class="fas fa-calendar-alt"></i>
+                <h4>Quando Andare</h4>
+                <p>Primavera e autunno ideali per trekking e cicloturismo. Estate per mare e spiagge. Inverno per atmosfera autentica e borghi silenziosi.</p>
+            </div>
+            <div class="consiglio-card fade-in">
+                <i class="fas fa-bicycle"></i>
+                <h4>Pista Ciclabile</h4>
+                <p>Noleggio bici disponibile a Sanremo, Arma di Taggia e Santo Stefano. Percorso pianeggiante, adatto a tutti. Portare acqua e protezione solare.</p>
+            </div>
+            <div class="consiglio-card fade-in">
+                <i class="fas fa-shoe-prints"></i>
+                <h4>Calzature</h4>
+                <p>Sulla costa: scarpe comode per passeggiate. In valle: scarponi da trekking per i sentieri di montagna. I borghi sono tutti saliscendi e ciottoli.</p>
+            </div>
+            <div class="consiglio-card fade-in">
+                <i class="fas fa-camera"></i>
+                <h4>Fotografia</h4>
+                <p>Tramonti spettacolari sulla costa. Nebbia e atmosfera mistica a Triora. Colori vivaci a Badalucco. Portare obiettivo grandangolare e teleobiettivo.</p>
+            </div>
+            <div class="consiglio-card fade-in">
+                <i class="fas fa-bed"></i>
+                <h4>Dove Dormire</h4>
+                <p>Hotel e B&B sulla costa. Agriturismi e case vacanza in valle. Soggiornare in entrambe le zone per vivere l'esperienza completa.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h2><i class="fas fa-compass"></i> Riviera delle Meraviglie</h2>
+        <p>Tra il mare cristallino e le vallate selvagge, una guida ai luoghi, ai sapori e ai racconti della Liguria occidentale.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p style="margin-top: 2rem; font-size: 0.85rem;">© 2026 Riviera delle Meraviglie. Guida e Racconti. Tutti i diritti riservati.</p>
+    </footer>
+
+    <script>
+        // Mobile menu
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        // Navbar hide/show on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                navbar.style.transform = 'translateY(-100%)';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            lastScroll = currentScroll;
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Zone tabs
+        function switchZone(zoneId) {
+            document.querySelectorAll('.zone-content').forEach(z => z.classList.remove('active'));
+            document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(zoneId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Modal functions
+        function openModal(raccontoId) {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.querySelectorAll('.modal-content').forEach(m => m.style.display = 'none');
+            document.getElementById(raccontoId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event.target === document.getElementById('modalOverlay')) {
+                document.getElementById('modalOverlay').classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function closeModalDirect() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModalDirect();
+            }
+        });
+
+        // Fade in animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
